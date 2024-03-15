@@ -23,14 +23,13 @@ exports.register = async(req,res,next) => {
             req.body.email,
             hashPass
         ]);
- if (rows.affectedRows === 1) {
- return res.status(201).json({
- message: "The user has been successfully 
-inserted.",
- });
- }
+        if (rows.affectedRows === 1) {
+            return res.status(201).json({
+                message: "The user has been successfully inserted.",
+            });
+        }
  
- }catch(err){
- next(err);
- }
+    }catch(err){
+        next(err);
+    }
 }
