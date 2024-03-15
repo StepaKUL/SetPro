@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
 const conn = require('../dbConnection').promise();
-exports.getUser = async (req,res,next) => {
-    try{
-        if(
+exports.getUser = async (req, res, next) => {
+    try {
+        if (
             !req.headers.authorization ||
             !req.headers.authorization.startsWith('Bearer') ||
             !req.headers.authorization.split(' ')[1]
-        ){
+        ) {
             return res.status(422).json({
                 message: "Please provide the token",
             });
@@ -17,17 +17,17 @@ exports.getUser = async (req,res,next) => {
             "SELECT `id`,`name`,`email` FROM `users` WHERE `id`=?",
             [decoded.id]
         );
-        if(row.length > 0){
+        if (row.length > 0) {
             return res.json({
-                user:row[0]
+                user: row[0]
             });
         }
         res.json({
-        message:"No user found"
+            message: "No user found"
         });
- 
+
     }
-    catch(err){
+    catch (err) {
         next(err);
     }
 }
