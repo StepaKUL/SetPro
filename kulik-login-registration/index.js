@@ -1,10 +1,16 @@
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+
 const path = require('path');
 const routes = require('./routes');
 const app = express();
+const passport = require('passport');
+require('./passport');
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
     name: 'session',
@@ -15,10 +21,17 @@ app.use(session({
         maxAge: 3600 * 1000, // 1hr
     }
 }));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(routes);
 app.use((err, req, res, next) => {
-    // console.log(err);
-    return res.send('Internal Server Error');
+    console.error(err.stack);
+    res.status(500).send('Internal Server Error');
 });
+
+routes.get('/', (req, res) => res.send(userProfile));
+routes.get('/login', (req, res) => res.send("error logging in"));
+
 app.listen(3000, () => console.log('Server is runngin on port 3000'));

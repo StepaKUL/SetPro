@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const passport = require('passport');
 const { body } = require("express-validator");
 const {
     homePage,
@@ -7,6 +8,7 @@ const {
     login,
     loginPage,
 } = require("./controllers/userController");
+
 const ifNotLoggedin = (req, res, next) => {
     if (!req.session.userID) {
         return res.redirect('/login');
@@ -65,4 +67,14 @@ router.get('/logout', (req, res, next) => {
     });
     res.redirect('/login');
 });
+router.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+router.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    function (req, res) {
+        res.redirect('/');
+        console.log("Succes Google")
+    }
+);
 module.exports = router;
