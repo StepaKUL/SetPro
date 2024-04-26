@@ -77,4 +77,14 @@ router.get('/auth/google/callback',
         console.log("Succes Google")
     }
 );
+router.get('/auth/github',
+    passport.authenticate('github', { scope: ['profile', 'email'] }));
+
+router.get('/auth/github/callback',
+    passport.authenticate('github', { failureRedirect: '/login' }),
+    function (req, res) {
+        res.redirect('/');
+        console.log("Success GitHub")
+    }
+);
 module.exports = router;
